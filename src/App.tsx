@@ -6,11 +6,11 @@ import { TodoList } from './components/TodoList';
 
 const checkUser = () => {
   return [...todosFromServer].map(td => {
-    const findUser = usersFromServer.find(usr => usr.id === td.userId);
+    const findUser = usersFromServer.filter(usr => usr.id === td.userId);
 
     return {
       ...td,
-      user: findUser,
+      user: findUser[0],
     };
   });
 };
@@ -42,7 +42,7 @@ export const App = () => {
   };
 
   const userHandler = () => {
-    return usersFromServer.find(user => user.id === userId);
+    return usersFromServer.filter(user => user.id === userId)[0];
   };
 
   const onAdd = (event: React.FormEvent) => {
