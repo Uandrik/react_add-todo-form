@@ -1,11 +1,4 @@
-import { TodoInfo } from '../TodoInfo';
-
-export type Todo = {
-  id: number;
-  title: string;
-  completed: boolean;
-  userId: number;
-};
+import { Todo, TodoInfo } from '../TodoInfo';
 
 export type Todos = {
   todos: Todo[];
@@ -13,15 +6,8 @@ export type Todos = {
 
 export const TodoList: React.FC<Todos> = ({ todos }) => (
   <section className="TodoList">
-    {todos.map(t => (
-      <TodoInfo
-        todos={todos}
-        key={t.id}
-        title={t.title}
-        userId={t.userId}
-        id={t.id}
-        completed={t.completed}
-      />
+    {todos.map(todo => (
+      <TodoInfo key={todo.id} todo={todo} />
     ))}
   </section>
 );

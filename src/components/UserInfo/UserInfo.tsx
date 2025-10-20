@@ -1,12 +1,15 @@
-import usersFromServer from '../../api/users';
-
-type UserId = {
+export interface User {
   id: number;
+  name: string;
+  username: string;
+  email: string;
+}
+
+type Props = {
+  user: User | undefined;
 };
 
-export const UserInfo: React.FC<UserId> = ({ id }) => {
-  const user = usersFromServer.find(u => u.id === id);
-
+export const UserInfo: React.FC<Props> = ({ user }) => {
   return (
     <a className="UserInfo" href={user?.email}>
       {user?.name}

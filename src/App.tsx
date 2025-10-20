@@ -4,8 +4,19 @@ import todosFromServer from './api/todos';
 import React, { useState } from 'react';
 import { TodoList } from './components/TodoList';
 
+const checkUser = () => {
+  return [...todosFromServer].map(td => {
+    const findUser = usersFromServer.find(usr => usr.id === td.userId);
+
+    return {
+      ...td,
+      user: findUser,
+    };
+  });
+};
+
 export const App = () => {
-  const [currentList, setCurrentList] = useState(todosFromServer);
+  const [currentList, setCurrentList] = useState(checkUser);
 
   const [userId, setUserId] = useState(0);
   const [userError, setUserError] = useState(false);
@@ -30,6 +41,10 @@ export const App = () => {
     return maxId.id + 1;
   };
 
+  const userHandler = () => {
+    return usersFromServer.find(user => user.id === userId);
+  };
+
   const onAdd = (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -45,6 +60,7 @@ export const App = () => {
       title: title,
       completed: false,
       userId: userId,
+      user: userHandler(),
     };
 
     setCurrentList(c => [...c, newUser]);
