@@ -5,18 +5,20 @@ import React, { useState } from 'react';
 import { TodoList } from './components/TodoList';
 
 const checkUser = () => {
-  return [...todosFromServer].map(td => {
-    const findUser = usersFromServer.filter(usr => usr.id === td.userId);
+  return todosFromServer.map(serverTodo => {
+    const findUser = usersFromServer.filter(
+      usr => usr.id === serverTodo.userId,
+    );
 
     return {
-      ...td,
+      ...serverTodo,
       user: findUser[0],
     };
   });
 };
 
 export const App = () => {
-  const [currentList, setCurrentList] = useState(checkUser);
+  const [currentList, setCurrentList] = useState(() => checkUser());
 
   const [userId, setUserId] = useState(0);
   const [userError, setUserError] = useState(false);
@@ -35,14 +37,11 @@ export const App = () => {
   };
 
   const idHandler = () => {
-    const copyCurrentList = [...currentList];
-    const maxId = copyCurrentList.sort((a, b) => b.id - a.id)[0];
+    if (currentList.length === 0) {
+      return 1;
+    }
 
-    return maxId.id + 1;
-  };
-
-  const userHandler = () => {
-    return usersFromServer.filter(user => user.id === userId)[0];
+    return Math.max(...currentList.map(t => t.id)) + 1;
   };
 
   const onAdd = (event: React.FormEvent) => {
@@ -55,15 +54,23 @@ export const App = () => {
       return;
     }
 
-    const newUser = {
+    const selected = usersFromServer.filter(user => user.id === userId)[0];
+
+    if (!selected) {
+      setUserError(true);
+
+      return;
+    }
+
+    const newTodo = {
       id: idHandler(),
       title: title,
       completed: false,
       userId: userId,
-      user: userHandler(),
+      user: selected,
     };
 
-    setCurrentList(c => [...c, newUser]);
+    setCurrentList(c => [...c, newTodo]);
 
     setTitle('');
     setUserId(0);
