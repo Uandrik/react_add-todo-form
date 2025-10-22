@@ -6,14 +6,9 @@ import { TodoList } from './components/TodoList';
 
 const checkUser = () => {
   return todosFromServer.map(serverTodo => {
-    const findUser = usersFromServer.filter(
-      usr => usr.id === serverTodo.userId,
-    );
+    const findUser = usersFromServer.find(usr => usr.id === serverTodo.userId);
 
-    return {
-      ...serverTodo,
-      user: findUser[0],
-    };
+    return { ...serverTodo, user: findUser ? findUser : null };
   });
 };
 
@@ -54,7 +49,7 @@ export const App = () => {
       return;
     }
 
-    const selected = usersFromServer.filter(user => user.id === userId)[0];
+    const selected = usersFromServer.find(user => user.id === userId);
 
     if (!selected) {
       setUserError(true);

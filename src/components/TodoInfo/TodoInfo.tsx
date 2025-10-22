@@ -6,7 +6,7 @@ export interface Todo {
   title: string;
   completed: boolean;
   userId: number;
-  user: User;
+  user: User | null;
 }
 
 type Props = {
@@ -22,6 +22,6 @@ export const TodoInfo: React.FC<Props> = ({ todo }) => (
   >
     <h2 className="TodoInfo__title">{todo.title}</h2>
 
-    <UserInfo user={todo.user} />
+    {todo.user && <UserInfo user={todo.user} />}
   </article>
 );
